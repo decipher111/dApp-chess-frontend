@@ -8,6 +8,7 @@ const socket = require('../connection/socket').socket
 function CreateNewGame(props) {
     const [didGetUserName, setDidGetUserName] = useState(false)
     const [inputText, setInputText] = useState('')
+    const [betInput, setBetInput] = useState(0)
     const [gameId, setGameId] = useState('')
     const { active, connector } = useWeb3React()
     const [web3jsInstance, setWeb3jsInstance] = useState(null)
@@ -47,11 +48,16 @@ function CreateNewGame(props) {
         const typedText = e.target.value
         setInputText(typedText)
     }
+    const changeBetValue = (e) => {
+      // grab the input text from the field from the DOM 
+      const value = e.target.value
+      setBetInput(value)
+  }
     return (<React.Fragment>
         {
             didGetUserName && props.contractAddress ?
 
-                <Redirect to={`/game/${gameId}/${props.contractAddress}`}><button className="btn btn-success" style={{ marginLeft: String((window.innerWidth / 2) - 60) + "px", width: "120px" }}>Start Game</button></Redirect>
+                <Redirect to={`/game/${gameId}/${props.contractAddress}/${props.betValue}`}><button className="btn btn-success" style={{ marginLeft: String((window.innerWidth / 2) - 60) + "px", width: "120px" }}>Start Game</button></Redirect>
 
                 :
                 <div className="big-wrapper light">
@@ -90,12 +96,17 @@ function CreateNewGame(props) {
                           <input
                           value={inputText}
                           onChange={typingUserName}></input>
+
+                          <input
+                          value={betInput}
+                          onChange={changeBetValue}></input>
   
                       <button className="btn btn-primary"
                           disabled={!(inputText.length > 0)}
                           onClick={() => {
                               props.didRedirect()
                               props.setUserName(inputText)
+                              props.setBetValue(betInput)
                               setDidGetUserName(true)
                               send()
                           }}>Submit</button>
@@ -127,7 +138,7 @@ function CreateNewGame(props) {
 const Onboard = (props) => {
     const color = React.useContext(ColorContext)
 
-    return <CreateNewGame didRedirect={color.playerDidRedirect} setUserName={props.setUserName} onWeb3Connect={props.onWeb3Connect} contractAddress={props.contractAddress}/>
+    return <CreateNewGame didRedirect={color.playerDidRedirect} setUserName={props.setUserName} betValue={props.betValue} setBetValue={props.setBetValue} onWeb3Connect={props.onWeb3Connect} contractAddress={props.contractAddress}/>
 }
 
 

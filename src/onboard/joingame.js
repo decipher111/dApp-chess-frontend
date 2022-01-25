@@ -7,7 +7,7 @@ const socket  = require('../connection/socket').socket
  */
 
 
-const JoinGameRoom = (gameid, userName, isCreator) => {
+const JoinGameRoom = (gameid, userName, isCreator,betValue) => {
     /**
      * For this browser instance, we want 
      * to join it to a gameRoom. For now
@@ -20,7 +20,8 @@ const JoinGameRoom = (gameid, userName, isCreator) => {
     const idData = {
         gameId : gameid,
         userName : userName,
-        isCreator: isCreator
+        isCreator: isCreator,
+        betValue:betValue
     }
     socket.emit("playerJoinGame", idData)
 }
@@ -32,7 +33,7 @@ const JoinGame = (props) => {
      * the 'gameId' is the gameRoom ID. 
      */
     const { gameid } = useParams()
-    JoinGameRoom(gameid, props.userName, props.isCreator)
+    JoinGameRoom(gameid, props.userName, props.isCreator,props.betValue)
     return <div style={{ height:"120px", width: "100px" }}>
         <img src="../images/2.png" className="logo-img" height={70} width={200} alt="Logo" />
     </div>

@@ -127,20 +127,20 @@ class ChessGame extends React.Component {
 
         if (blackCheckmated) {
             alert("WHITE WON BY CHECKMATE!")
-            let Contract = new this.props.web3.eth.Contract(contractData.abi, this.props.contractAddress)
-            // console.log(Contract)
-            this.props.web3.eth.getAccounts((err, accounts) => {
-                if (err) {
-                    console.error(err)
-                } else {
-                    Contract.methods.verifyPlayerBalance().call({
-                        from: accounts[0], //get account address of player
-                        gas: 4712388,
-                    }).then((res) => {
-                        console.log(res)
-                    });
-                }
-            })
+            console.log('hello2')
+            // let Contract = new this.props.web3.eth.Contract(contractData.abi, this.props.contractAddress)
+            // this.props.web3.eth.getAccounts((err, accounts) => {
+            //     if (err) {
+            //         console.error(err)
+            //     } else {
+            //         Contract.methods.verifyPlayerBalance().call({
+            //             from: accounts[0], //get account address of player
+            //             gas: 4712388,
+            //         }).then((res) => {
+            //             console.log(res)
+            //         });
+            //     }
+            // })
 
         } else if (whiteCheckmated) {
             alert("BLACK WON BY CHECKMATE!")
@@ -292,7 +292,7 @@ const ChessGameWrapper = (props) => {
     // get the gameId from the URL here and pass it to the chessGame component as a prop. 
     const domainName = 'http://localhost:3000'
     const color = React.useContext(ColorContext)
-    const { gameid, contractAddress } = useParams()
+    const { gameid, contractAddress,betValue } = useParams()
     const [play] = useSound(chessMove);
     const [opponentSocketId, setOpponentSocketId] = React.useState('')
     const [opponentDidJoinTheGame, didJoinGame] = React.useState(false)
@@ -391,7 +391,7 @@ const ChessGameWrapper = (props) => {
                             console.log('sd')
                             event.target.select()
                         }}
-                        value={`${domainName}/game/${gameid}/${contractAddress}`}
+                        value={`${domainName}/game/${gameid}/${contractAddress}/${betValue}`}
                         type="text">
                     </textarea>
                     <br></br>

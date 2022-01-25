@@ -5,7 +5,6 @@ import { useParams } from 'react-router'
 import { useWeb3React } from '@web3-react/core'
 import Web3 from 'web3'
 const contractData = require('../contractData')
-const val = '1';
 
 
 /**
@@ -19,6 +18,7 @@ function JoinRoom() {
     const { active, connector } = useWeb3React()
     const [web3jsInstance, setWeb3jsInstance] = useState(null)
     const [account, setAccount] = useState('')
+    const { betValue } = useParams()
 
     console.log(gameid, contractAddress)
 
@@ -40,9 +40,10 @@ function JoinRoom() {
                 console.error(err)
             } else {
                 setAccount(accounts[0])
+                console.log(betValue.toString())
                 Contract.methods.setupPlayer2().send({
                     from: accounts[0],
-                    value: web3jsInstance.utils.toWei(val),
+                    value: web3jsInstance.utils.toWei(betValue.toString()),
                     gas: 4712388,
                 }).then((res) => {
                     console.log(res)
@@ -56,7 +57,6 @@ function JoinRoom() {
         const typedText = e.target.value
         setInputText(typedText)
     }
-
 
     return (<React.Fragment>
         {
@@ -72,6 +72,8 @@ function JoinRoom() {
                     <input style={{ marginLeft: String((window.innerWidth / 2) - 120) + "px", width: "240px", marginTop: "62px" }}
                         value={inputText}
                         onChange={typingUserName}></input>
+                    
+                    <h3 style={{ textAlign: "center", marginTop: String((window.innerHeight / 3)) + "px" }}> Bet Value For This Game is {betValue}</h3>
 
                     <button className="btn btn-primary"
                         style={{ marginLeft: String((window.innerWidth / 2) - 60) + "px", width: "120px", marginTop: "62px" }}

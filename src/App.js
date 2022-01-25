@@ -18,6 +18,7 @@ function App() {
   const [didRedirect, setDidRedirect] = React.useState(false)
   const [web3, setWeb3] = useState('')
   const [contractAddress, setContractAddress] = useState('')
+  const [betValue, setBetValue] = useState(0)
 
   const playerDidRedirect = React.useCallback(() => {
     setDidRedirect(true)
@@ -45,15 +46,15 @@ function App() {
           console.log(web3.eth)
           let Contract = new web3.eth.Contract(contractData.abi, null, {
             from: accounts[0],
-            value: web3.utils.toWei(val),
+            value: web3.utils.toWei(betValue.toString()),
             data: contractData.bytecode.object,
             gas: 4712388,
           })
             .deploy({
-              value: web3.utils.toWei(val),
+              value: web3.utils.toWei(betValue.toString()),
               data: contractData.bytecode.object,
             }).send({
-              value: web3.utils.toWei(val),
+              value: web3.utils.toWei(betValue.toString()),
               from: accounts[0]
             }).on('receipt', function (receipt) {
               setContractAddress(receipt.contractAddress)
@@ -73,12 +74,12 @@ function App() {
           <Router>
             <Switch>
               <Route path="/" exact>
-                <Onboard setUserName={setUserName} onWeb3Connect={onWeb3Connect} contractAddress={contractAddress}/>
+                <Onboard setUserName={setUserName} onWeb3Connect={onWeb3Connect} contractAddress={contractAddress} betValue={betValue} setBetValue={setBetValue}/>
               </Route>
-              <Route path="/game/:gameid/:contractAddress" exact>
+              <Route path="/game/:gameid/:contractAddress/:betValue" exact>
                 {didRedirect ?
                   <React.Fragment>
-                    <JoinGame userName={userName} isCreator={true} />
+                    <JoinGame userName={userName} isCreator={true}/>
                     <ChessGame myUserName={userName} web3={web3}/>
                   </React.Fragment>
                   :
